@@ -17,6 +17,8 @@ import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.math.Quaternion;
+import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
@@ -62,14 +64,23 @@ public class MainActivity extends AppCompatActivity {
                         Anchor anchor = hitResult.createAnchor();
                         AnchorNode anchorNode = new AnchorNode(anchor);
                         anchorNode.setParent(arFragment.getArSceneView().getScene());
-
                         TransformableNode model = new TransformableNode(arFragment.getTransformationSystem());
-                        model.setParent(anchorNode);
                         model.setRenderable(modelRenderable);
-                        model.getRotationController();
-                        model.getScaleController();
-                        model.getTranslationController();
+
+                        //大きさを指定します。
+                        model.getScaleController().setMinScale(0.01f);
+                        model.getScaleController().setMaxScale(2.0f);
+                        //v:width v1:? v2:height
+                        model.setLocalScale(new Vector3(0.5f,0f,0.5f));
+                        //座標を指定します
+                        model.setLocalPosition(new Vector3(0,0.0f,0));
+                        //y軸　縦軸　を中心に１８０度回転
+                        model.setLocalRotation(Quaternion.axisAngle(new Vector3(0,1,0),-180));
+                        model.setParent(anchorNode);
                         model.select();
+
+
+
                     });
         }
 
